@@ -1,0 +1,27 @@
+{
+    "nouns": [
+      "fox", "dog", "cat", "robot", "programmer", "car", "train", "computer", 
+      "mouse", "pencil", "book", "house", "tree", "ocean", "mountain", 
+      "bicycle", "plane", "baker", "teacher", "guitar", "flower"
+    ],
+    "verbs": [
+      "jumps", "runs", "codes", "drives", "flies", "walks", "types", 
+      "writes", "plays", "reads", "climbs", "swims", "paints", 
+      "sings", "dances", "whispers"
+    ],
+    "adjectives": [
+      "quick", "lazy", "happy", "slow", "brilliant", "bright", "quiet", 
+      "loud", "angry", "curious", "tiny", "massive", "beautiful", 
+      "clever", "bold", "graceful", "colorful", "calm", "mysterious"
+    ],
+    "adverbs": [
+      "quickly", "lazily", "happily", "slowly", "brilliantly", 
+      "quietly", "loudly", "boldly", "gracefully", "beautifully", 
+      "carefully", "clumsily", "serenely", "curiously", "eagerly"
+    ],
+    "prepositions": [
+      "over", "under", "near", "beside", "above", "below", 
+      "around", "through", "across", "beyond", "between", "against", 
+      "toward", "behind"
+    ]
+}
