@@ -12,19 +12,30 @@ exports.getSentences = (req, res, next) => {
   res.send(sentences);
 };
 
-// return a random word from an array
-function getRandomWord(array) {
+// return a random element from an array
+function getRandomArrayElement(array) {
   return array[Math.floor(Math.random() * array.length)];
 }
 
 // return a random sentence generated from a template
 function generateRandomSentence() {
-  const template = getRandomWord(sentenceTemplates);
+  const template = getRandomArrayElement(sentenceTemplates);
 
-  return template
-    .replace(/\{noun\}/g, getRandomWord(wordPools.nouns))
-    .replace(/\{verb\}/g, getRandomWord(wordPools.verbs))
-    .replace(/\{adjective\}/g, getRandomWord(wordPools.adjectives))
-    .replace(/\{adverb\}/g, getRandomWord(wordPools.adverbs))
-    .replace(/\{preposition\}/g, getRandomWord(wordPools.prepositions));
+  // replace all placeholders with unique random words
+  return template.replace(/{noun}|{verb}|{adjective}|{adverb}|{preposition}/g, (placeholder) => {
+    switch (placeholder) {
+      case "{noun}":
+        return getRandomArrayElement(wordPools.nouns);
+      case "{verb}":
+        return getRandomArrayElement(wordPools.verbs);
+      case "{adjective}":
+        return getRandomArrayElement(wordPools.adjectives);
+      case "{adverb}":
+        return getRandomArrayElement(wordPools.adverbs);
+      case "{preposition}":
+        return getRandomArrayElement(wordPools.prepositions);
+      default:
+        return placeholder;
+    }
+  });
 }
