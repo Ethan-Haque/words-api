@@ -39,3 +39,7 @@ function generateRandomSentence() {
     }
   });
 }
+
+module.exports = {
+  generateRandomSentence
+}
