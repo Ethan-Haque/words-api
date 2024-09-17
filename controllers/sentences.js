@@ -5,11 +5,14 @@ const wordPools = JSON.parse(fs.readFileSync('./data/wordPools.json', 'utf8'));
 const sentenceTemplates = JSON.parse(fs.readFileSync('./data/sentenceTemplates.json', 'utf8')).templates;
 
 exports.getSentences = (req, res, next) => {
-  const sentences = [];
+  let sentences = "";
   for (let i = 0; i < req.params.amount; i++) {
-    sentences.push(generateRandomSentence());
+    sentences += generateRandomSentence();
+    if (i < req.params.amount - 1) {
+      sentences += " ";
+    }
   }
-  res.send(sentences);
+  res.send(sentences.toString());
 };
 
 // return a random element from an array
@@ -38,8 +41,4 @@ function generateRandomSentence() {
         return placeholder;
     }
   });
-}
-
-module.exports = {
-  generateRandomSentence
 }
