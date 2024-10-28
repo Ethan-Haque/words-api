@@ -10,6 +10,6 @@ router.post('/login', u.login);
 
 router.post('/logout', u.logout);
 
-router.get('/status', u.checkStatus);
+router.get('/session', u.checkSession);
 
 module.exports = router; 
