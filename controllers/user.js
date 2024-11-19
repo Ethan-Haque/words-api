@@ -49,7 +49,7 @@ exports.checkIfUserExists = async (req, res) => {
 
 // Authenticate and login user
 exports.login = async (req, res) => {
-  const { username, password } = req.body;
+  const { username, passcode } = req.body;
 
   try {
     const user = await pool.query('SELECT id, passcode FROM users WHERE username = $1', [username]);
@@ -58,10 +58,10 @@ exports.login = async (req, res) => {
       return res.status(400).json({ msg: "User not found" });
     }
 
-    const validPassword = await bcrypt.compare(password, user.rows[0].passcode);
+    const validPasscode = await bcrypt.compare(passcode, user.rows[0].passcode);
 
-    if (!validPassword) {
-      return res.status(400).json({ msg: "Invalid password" });
+    if (!validPasscode) {
+      return res.status(400).json({ msg: "Invalid passcode" });
     }
 
     // Create a session by storing user ID
