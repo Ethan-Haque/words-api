@@ -19,6 +19,8 @@ app.use(cors({
   credentials: true,
 }));
 
+app.set("trust proxy", 1); // trust first proxy for session cookie
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
