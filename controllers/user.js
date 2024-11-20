@@ -66,6 +66,7 @@ exports.login = async (req, res) => {
 
     // Create a session by storing user ID
     req.session.userId = user.rows[0].id;
+    req.session.username = username;
     res.json({ msg: 'Logged in successfully', userId: req.session.userId });
   } catch (err) {
     console.error(err.message);
@@ -77,7 +78,7 @@ exports.login = async (req, res) => {
 // Check if user is logged in
 exports.checkSession = (req, res) => {
   if (req.session.userId) {
-    return res.json({ loggedIn: true, userId: req.session.userId });
+    return res.json({ loggedIn: true, username: req.session.username });
   } else {
     return res.json({ loggedIn: false });
   }
