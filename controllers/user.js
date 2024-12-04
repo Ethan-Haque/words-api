@@ -22,6 +22,9 @@ exports.createUser = async (req, res) => {
       [normalizedUsername, hashedPasscode]
     );
 
+    req.session.userId = newUser.rows[0].id;
+    req.session.username = normalizedUsername;
+    
     res.status(201).json({ success: true });
 
   } catch (err) {
