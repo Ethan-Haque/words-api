@@ -7,6 +7,7 @@ const cors = require('cors');
 const sessionMiddleware = require('./middleware/session');
 let sentenceRouter = require('./routes/sentences');
 let userRouter = require('./routes/user');
+let scoreRouter = require('./routes/score');
 require('dotenv').config()
 
 const apiKey = process.env.API_KEY;
@@ -39,6 +40,7 @@ app.use(checkApiKey); // Apply API key check globally
 
 app.use('/sentences', sentenceRouter);
 app.use('/user', sessionMiddleware, userRouter);
+app.use('/score', sessionMiddleware, scoreRouter);
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
 module.exports = app;
