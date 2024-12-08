@@ -2,7 +2,6 @@
     "templates": [
       "The {adjective} {noun} {verb} {preposition} the {adjective} {noun}.",
       "A {adjective} {noun} {adverb} {verb} {preposition} the {noun}.",
-      "{noun} always {verb} {preposition} the {adjective} {noun}.",
       "The {noun} {adverb} {verb} {preposition} the {noun}.",
       "After the {adjective} {noun} {verb}, the {noun} {adverb} {verb}.",
       "When the {noun} {verb} {preposition} the {noun}, it {verb} {adverb}.",

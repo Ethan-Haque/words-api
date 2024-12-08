@@ -3,11 +3,14 @@ const pool = require('../db');
 
 exports.createUser = async (req, res) => {
   const { username, passcode } = req.body;
+
+  const normalizedUsername = username.toLowerCase();
+
   try {
     // Check if the username already exists
-    const userExists = await pool.query('SELECT id FROM users WHERE username = $1', [username]);
+    const userExists = await pool.query('SELECT id FROM users WHERE username = $1', [normalizedUsername]);
     if (userExists.rows.length > 0) {
-      return res.status(400).json({ message: 'Username already exists' });
+      return res.status(400).json({ msg: 'Username already exists' });
     }
 
     // Hash the passcode before storing it
@@ -16,10 +19,13 @@ exports.createUser = async (req, res) => {
     // Insert new user into the database
     const newUser = await pool.query(
       'INSERT INTO users (username, passcode, created_at) VALUES ($1, $2, CURRENT_TIMESTAMP) RETURNING *',
-      [username, hashedPasscode]
+      [normalizedUsername, hashedPasscode]
     );
 
-    res.status(201).json(newUser.rows[0]);
+    req.session.userId = newUser.rows[0].id;
+    req.session.username = normalizedUsername;
+    
+    res.status(201).json({ success: true });
 
   } catch (err) {
     console.error(err.message);
@@ -31,8 +37,10 @@ exports.createUser = async (req, res) => {
 exports.checkIfUserExists = async (req, res) => {
   const { username } = req.params;
 
+  const normalizedUsername = username.toLowerCase();
+
   try {
-    const user = await pool.query('SELECT id FROM users WHERE username = $1', [username]);
+    const user = await pool.query('SELECT id FROM users WHERE username = $1', [normalizedUsername]);
 
     if (user.rows.length > 0) {
       return res.json({ exists: true });
@@ -42,7 +50,7 @@ exports.checkIfUserExists = async (req, res) => {
 
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ msg: 'Server error' });
   }
 };
 
@@ -51,22 +59,25 @@ exports.checkIfUserExists = async (req, res) => {
 exports.login = async (req, res) => {
   const { username, passcode } = req.body;
 
+  const normalizedUsername = username.toLowerCase();
+
   try {
-    const user = await pool.query('SELECT id, passcode FROM users WHERE username = $1', [username]);
+    const user = await pool.query('SELECT id, passcode FROM users WHERE username = $1', [normalizedUsername]);
 
     if (user.rows.length === 0) {
-      return res.status(400).json({ msg: "User not found" });
+      return res.status(400).json({ msg: "User not found", loggedIn: false });
     }
 
     const validPasscode = await bcrypt.compare(passcode, user.rows[0].passcode);
 
     if (!validPasscode) {
-      return res.status(400).json({ msg: "Invalid passcode" });
+      return res.status(400).json({ msg: "Invalid passcode", loggedIn: false });
     }
 
     // Create a session by storing user ID
     req.session.userId = user.rows[0].id;
-    res.json({ msg: 'Logged in successfully', userId: req.session.userId });
+    req.session.username = normalizedUsername;
+    res.json({ msg: 'Logged in successfully', userId: req.session.userId, loggedIn: true });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
@@ -77,7 +88,7 @@ exports.login = async (req, res) => {
 // Check if user is logged in
 exports.checkSession = (req, res) => {
   if (req.session.userId) {
-    return res.json({ loggedIn: true, userId: req.session.userId });
+    return res.json({ loggedIn: true, username: req.session.username });
   } else {
     return res.json({ loggedIn: false });
   }
